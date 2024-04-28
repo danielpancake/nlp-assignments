@@ -1,0 +1,16 @@
+title: "Nested NER on Russian dataset using dict and spaCy model"
+description: "Merges NER spans from multiple `test.jsonl` from all solutions"
+
+vars:
+  output_dir: "../../out"
+
+commands:
+  - name: "merge"
+    help: "Merges NER spans from multiple `test.jsonl` files in a directory."
+    script:
+      - >-
+        python -m scripts.merger
+        ${vars.output_dir}
+        --output ${vars.output_dir}/merged/test.jsonl
+    outputs:
+      - ${vars.output_dir}/merged/test.jsonl

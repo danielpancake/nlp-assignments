@@ -1,0 +1,6 @@
+*.iob2
+*.lock
+*.spacy
+out/
+metrics/
+training/

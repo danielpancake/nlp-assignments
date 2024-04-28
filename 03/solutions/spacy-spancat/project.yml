@@ -1,0 +1,112 @@
+title: "Nested NER on Russian dataset using spaCy SpanCat"
+description: "Train a SpanCat model for Nested NER on a Russian dataset."
+
+vars:
+  data_dir: "../../data"
+  output_dir: "../../out"
+
+  jsonl_dir: "${vars.data_dir}/jsonl"
+  iob2_dir: "${vars.data_dir}/iob2"
+  
+  gpu_id: 0  # -1 for CPU, 0 for GPU
+
+directories:
+  - "configs"
+  - "corpus"
+  - "metrics"
+  - "scripts"
+  - "training"
+
+workflows:
+  all:
+    - "requirements"
+    - "jsonl_to_iob2"
+    - "iob2_to_spacy"
+    - "train"
+    - "evaluate"
+    - "inference"
+
+  prepare_data:
+    - "jsonl_to_iob2"
+    - "iob2_to_spacy"
+
+commands:
+  - name: "requirements"
+    help: "Install the required Python packages"
+    script:
+      - "pip install -r requirements.txt"
+      - "python -m spacy download ru_core_news_lg"
+    deps:
+      - "requirements.txt"
+
+  - name: "jsonl_to_iob2"
+    help: "Converts the given JSONL data to IOB2 format."
+    script:
+      - "python -m scripts.jsonl_to_iob2 ${vars.jsonl_dir}/train.jsonl -o ${vars.iob2_dir}/"
+    deps:
+      - "${vars.jsonl_dir}/train.jsonl"
+    outputs:
+      - "${vars.iob2_dir}/train.iob2"
+      - "${vars.iob2_dir}/dev.iob2"
+      - "${vars.iob2_dir}/test.iob2"
+
+  - name: "iob2_to_spacy"
+    help: "Convert IOB2 data to spaCy format."
+    script:
+      - "python -m scripts.iob2_to_spacy ${vars.iob2_dir}/train.iob2 -o corpus/train.spacy"
+      - "python -m scripts.iob2_to_spacy ${vars.iob2_dir}/dev.iob2   -o corpus/dev.spacy"
+      - "python -m scripts.iob2_to_spacy ${vars.iob2_dir}/test.iob2  -o corpus/test.spacy"
+    deps:
+      - "${vars.iob2_dir}/train.iob2"
+      - "${vars.iob2_dir}/dev.iob2"
+      - "${vars.iob2_dir}/test.iob2"
+    outputs:
+      - "corpus/train.spacy"
+      - "corpus/dev.spacy"
+      - "corpus/test.spacy"
+
+  - name: "train"
+    help: "Train a SpanCat model"
+    script:
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/spancat/
+        --paths.train corpus/train.spacy
+        --paths.dev corpus/dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - "corpus/train.spacy"
+      - "corpus/dev.spacy"
+      - "corpus/test.spacy"
+    outputs:
+      - "training/spancat/model-best"
+      - "training/spancat/model-last"
+
+  - name: "evaluate"
+    help: "Evaluate SpanCat model"
+    script:
+      - "python -m scripts.mkdirs metrics/spancat/"
+      - >-
+        python -m spacy evaluate
+        training/spancat/model-best
+        corpus/test.spacy
+        --output metrics/spancat/scores.json
+    deps:
+      - "corpus/test.spacy"
+      - "training/spancat/model-best"
+    outputs:
+      - "metrics/spancat/scores.json"
+
+  - name: "inference"
+    help: "Run inference on the test data"
+    script:
+      - >-
+        python -m scripts.inference
+        training/spancat/model-best
+        ${vars.jsonl_dir}/test.jsonl
+        --output ${vars.output_dir}/spancat/test.jsonl
+    deps:
+      - "${vars.jsonl_dir}/test.jsonl"
+    outputs:
+      - ${vars.output_dir}/spancat/test.jsonl"

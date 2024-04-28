@@ -1,4 +1,0 @@
-*.lock
-*.spacy
-training/
-__pycache__
