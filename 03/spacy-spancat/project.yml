@@ -1,0 +1,73 @@
+title: "Nested NER Russian dataset"
+description: |
+  This is a simple project configuration file that demonstrates how to train a spaCy model using the SpanCat architecture.
+
+vars:
+  gpu_id: -1  # -1 for CPU, 0 for GPU
+
+directories:
+  - "configs"
+  - "corpus"
+  - "data"
+  - "scripts"
+  - "training"
+
+workflows:
+  all:
+    - "download"
+    - "convert"
+    - "train"
+
+commands:
+  - name: "download"
+    help: "Download model-related assets"
+    script:
+      - "python -m spacy download ru_core_news_lg"
+
+  - name: "convert"
+    help: "Convert IOB file into the spaCy format"
+    script:
+      - "python -m scripts.convert data/iob2/train.iob2 -o corpus/train.spacy"
+      - "python -m scripts.convert data/iob2/dev.iob2 -o corpus/dev.spacy"
+      - "python -m scripts.convert data/iob2/test.iob2 -o corpus/test.spacy"
+    deps:
+      - "data/iob2/train.iob2"
+      - "data/iob2/dev.iob2"
+      - "data/iob2/test.iob2"
+    outputs:
+      - "corpus/train.spacy"
+      - "corpus/dev.spacy"
+      - "corpus/test.spacy"
+
+  - name: "train"
+    help: "Train a SpanCat model"
+    script:
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/spancat/
+        --paths.train corpus/train.spacy
+        --paths.dev corpus/dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - "corpus/train.spacy"
+      - "corpus/dev.spacy"
+      - "corpus/test.spacy"
+    outputs:
+      - "training/spancat/model-best"
+      - "training/spancat/model-last"
+
+  - name: "evaluate"
+    help: "Evaluate SpanCat model"
+    script:
+      - "mkdir -p metrics/spancat"
+      - >-
+        python -m spacy evaluate
+        training/spancat/model-best
+        corpus/test.spacy
+        --output metrics/spancat/scores.json
+    deps:
+      - "training/spancat/model-best"
+      - "corpus/test.spacy"
+    outputs:
+      - "metrics/spancat/scores.json"
