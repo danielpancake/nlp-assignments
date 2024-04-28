@@ -4,9 +4,9 @@ This directory contains assignment solutions. Each solution is in a separate dir
 
 | Model | Description | Codalab Score |
 | --- | --- | --- |
-| [`dict`](dict) | Dictionary-based flat NER approach | 0.35 |
+| [`dict`](dict) | Dictionary-based n-gram approach | 0.42 |
 | [`spacy-spancat`](spacy-spancat) | Nested NER using spaCy's SpanCat | 0.27 |
-| [`merged`](merged) | Merges the results of two approaches | **0.43** |
+| [`merged`](merged) | Merges the results of two approaches | **0.46** |
 
 NOTE: only the [`dict`](dict) solution is in the format of Jupiter Notebook,
 remaining solutions are in the [`🦦 weasel`](https://github.com/explosion/weasel) format, since it's a preferred way for spaCy projects.
