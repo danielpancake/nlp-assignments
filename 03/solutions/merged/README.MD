@@ -20,9 +20,6 @@ weasel run merge
 The [`project.yml`](project.yml) defines the available commands and workflows. For details, see the
 [Weasel documentation](https://github.com/explosion/weasel).
 
-It also contains some variables that can be changed to customize the behavior of the project.
-To switch between CPU and GPU training, [set the `gpu_id` variable](project.yml?plain=1#L11) to the desired GPU ID or `-1` for CPU.
-
 ### ⏯ Commands
 
 The following commands are defined by the project. They
