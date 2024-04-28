@@ -1,6 +1,6 @@
 # 🪐 Solutions
 
-This directory contains the solutions to the assignment. The solutions are organized in the following structure:
+This directory contains assignment solutions. Each solution is in a separate directory and has its own README file with instructions on how to run it.
 
 | Model | Description | Codalab Score |
 | --- | --- | --- |
