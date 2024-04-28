@@ -6,7 +6,7 @@ vars:
 
 commands:
   - name: "merge"
-    help: "Merges NER spans from multiple `test.jsonl` files in a directory."
+    help: "Merges NER spans from multiple `test.jsonl` files from all solutions."
     script:
       - >-
         python -m scripts.merger
