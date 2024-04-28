@@ -1,6 +1,8 @@
 # Natural Language Processing - Assignment 3 - Russian Nested Named Entities Recognition
 
-![](example.png)
+<p align="center">
+  <img src="example.png">
+</p>
 
 ## Solutions
 
