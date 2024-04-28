@@ -47,10 +47,18 @@ The classifier itself has three steps: Embedding, Pooling, and Scoring.
 
 The final solution is a merge of both approaches. Both the dictionary-based and spaCy SpanCat models are used to predict the labels for the test data. The predictions are then merged and filtered to get the final result.
 
+This approach achieved the best F1 score of **0.53**. This is likely because the dictionary-based approach effectively tags common entities from the dictionary, while the SpanCat model tackles unseen entities using its trained NLP model.
+
 ### Results
 
 | Solution | Codalab Score |
 | --- | --- |
 | Dictionary-based approach | 0.49 |
 | SpaCy SpanCat approach | 0.45 |
-| Merge of both approaches | **0.51** |
+| Merge of both approaches | **0.53** |
+
+The relatively low F1 score of the SpanCat model (0.45) may be due to several factors:
+
+- Imbalanced training dataset. The model may struggle to generalize effectively to underrepresented classes.
+- Tokenization and text preprocessing. Meaning, that the way the text is expected to be tokenized internally on the Codalab platform may differ from the steps taken during training, leading to a mismatch and degraded performance.
+- Hyperparameter tuning. The hyperparameters used for training the SpanCat model may not be optimal for this particular dataset and task, and further tuning could potentially improve the results.

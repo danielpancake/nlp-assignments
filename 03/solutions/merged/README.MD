@@ -1,6 +1,6 @@
 # Merger Solution
 
-> CODALAB SCORE: 0.43
+> CODALAB SCORE: 0.53
 
 ## Description
 

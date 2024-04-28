@@ -42,9 +42,9 @@ commands:
   - name: "jsonl_to_iob2"
     help: "Converts the given JSONL data to IOB2 format."
     script:
-      - "python -m scripts.jsonl_to_iob2 ${vars.jsonl_dir}/train.jsonl -o ${vars.iob2_dir}/"
+      - "python -m scripts.jsonl_to_iob2 ${vars.jsonl_dir}/train_sm.jsonl -o ${vars.iob2_dir}/"
     deps:
-      - "${vars.jsonl_dir}/train.jsonl"
+      - "${vars.jsonl_dir}/train_sm.jsonl"
     outputs:
       - "${vars.iob2_dir}/train.iob2"
       - "${vars.iob2_dir}/dev.iob2"

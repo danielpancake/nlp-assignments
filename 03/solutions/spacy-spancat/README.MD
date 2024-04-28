@@ -1,6 +1,6 @@
 # SpaCy's SpanCat for Nested NER
 
-> CODALAB SCORE: 0.27
+> CODALAB SCORE: 0.45
 
 ## Description
 
