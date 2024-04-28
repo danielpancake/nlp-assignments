@@ -1,6 +1,6 @@
 # Natural Language Processing - Assignment 3 - Russian Nested Named Entities Recognition
 
-![example.png](Example of the inference using SpaCy SpanCat)
+![](example.png)
 
 ## Solutions
 
