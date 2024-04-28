@@ -52,11 +52,11 @@ def tokenize_dataset(file_path: str) -> List[dict]:
             if len(word_pos) == 0:
                 raise ValueError("No word position found for NER")
 
-            expected = text[ner[0] : ner[1] + 1]
-            got = " ".join(text_tokenized[word_pos[0] : word_pos[-1] + 1])
+            # Sanity check by comparing the number of tokens
+            expected = len(list(razdel.tokenize(text[ner[0] : ner[1] + 1])))
+            got = word_pos[-1] - word_pos[0] + 1
 
-            # Sanity check
-            assert (len(expected) - len(got)) <= 1, f"Expected: {expected}, Got: {got}"
+            assert abs(expected - got) <= 1, f"Expected: {expected} tokens, got: {got} tokens"
 
             ners_tokenized.append([word_pos[0], word_pos[-1], ner[2]])
 
@@ -90,7 +90,7 @@ def tokenized_to_iob2(dataset_tokenized: List[dict]) -> List[dict]:
                 depth += 1
 
             if depth == MAX_STACK:
-                print("Stack is full!")
+                msg.warn("Stack is full! Skipping the NER.")
                 continue
 
             for i in range(beg, end):

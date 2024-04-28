@@ -19,7 +19,7 @@ directories:
 
 workflows:
   all:
-    - "requirements"
+    # - "requirements"
     - "jsonl_to_iob2"
     - "iob2_to_spacy"
     - "train"
@@ -76,6 +76,7 @@ commands:
         --paths.dev corpus/dev.spacy
         --gpu-id ${vars.gpu_id}
     deps:
+      - "configs/spancat.cfg"
       - "corpus/train.spacy"
       - "corpus/dev.spacy"
       - "corpus/test.spacy"
@@ -92,6 +93,7 @@ commands:
         training/spancat/model-best
         corpus/test.spacy
         --output metrics/spancat/scores.json
+        --gpu-id ${vars.gpu_id}
     deps:
       - "corpus/test.spacy"
       - "training/spancat/model-best"
@@ -108,5 +110,6 @@ commands:
         --output ${vars.output_dir}/spancat/test.jsonl
     deps:
       - "${vars.jsonl_dir}/test.jsonl"
+      - "training/spancat/model-best"
     outputs:
       - ${vars.output_dir}/spancat/test.jsonl"

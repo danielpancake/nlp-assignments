@@ -1,6 +1,6 @@
 # Dictionary approach for Nested NER
 
-> CODALAB SCORE: 0.42
+> CODALAB SCORE: 0.49
 
 ## Description
 

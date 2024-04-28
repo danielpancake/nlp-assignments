@@ -20,6 +20,18 @@ The dictionary is then used to predict the labels for the test data. Candidates 
 
 This approach uses the SpaCy library to train a Span Categorization (SpanCat) model. The training data is converted to the IOB2 format and then to the SpaCy format. The model is then trained and evaluated.
 
+IOB2 format used during training has the following structure:
+
+```text
+TOKEN \t IOB2_TAG \t IOB2_TAG \t IOB2_TAG \t IOB2_TAG \n
+TOKEN \t IOB2_TAG \t IOB2_TAG \t IOB2_TAG \t IOB2_TAG \n
+...
+```
+
+The token is followed by 4 (default) IOB2 tags (parallel stacks) separated by tabs. The tags are in the format `B-LABEL` for the beginning of the entity, `I-LABEL` for the inside of the entity, and `O` for outside of the entity.
+
+Number of parallel stacks can be changed by setting the `MAX_STACK` parameter in the `scripts/constants.py` file.
+
 This model consists of two parts:
 
 - a suggester - a model that suggests possible spans for the entity
@@ -39,6 +51,6 @@ The final solution is a merge of both approaches. Both the dictionary-based and 
 
 | Solution | Codalab Score |
 | --- | --- |
-| Dictionary-based approach | 0.42 |
-| SpaCy SpanCat approach | 0.27 |
-| Merge of both approaches | **0.46** |
+| Dictionary-based approach | 0.49 |
+| SpaCy SpanCat approach | 0.45 |
+| Merge of both approaches | **0.51** |
