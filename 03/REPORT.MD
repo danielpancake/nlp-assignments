@@ -18,11 +18,22 @@ The dictionary is then used to predict the labels for the test data. Candidates 
 
 ### SpaCy SpanCat approach
 
-This approach uses the SpaCy library to train a Span Categorization model. The training data is converted to the IOB2 format and then to the SpaCy format. The model is then trained and evaluated.
+This approach uses the SpaCy library to train a Span Categorization (SpanCat) model. The training data is converted to the IOB2 format and then to the SpaCy format. The model is then trained and evaluated.
+
+This model consists of two parts:
+
+- a suggester - a model that suggests possible spans for the entity
+- and a classifier - a model that classifies the suggested spans into the correct label.
+
+The classifier itself has three steps: Embedding, Pooling, and Scoring.
+
+- Embedding obtains numerical representations (tok2vec) for candidate spans;
+- Pooling reduces sequences for robustness, encode context with a window encoder;
+- Scoring rerforms multi-label classification on pooled spans to obtain predictions and label probabilities.
 
 ### Merge of both approaches
 
-The final solution is a merge of both approaches. Both the dictionary-based and spaCy SpanCat models are used to predict the labels for the test data. The predictions are then merged to get the final result.
+The final solution is a merge of both approaches. Both the dictionary-based and spaCy SpanCat models are used to predict the labels for the test data. The predictions are then merged and filtered to get the final result.
 
 ### Results
 
@@ -30,4 +41,4 @@ The final solution is a merge of both approaches. Both the dictionary-based and 
 | --- | --- |
 | Dictionary-based approach | 0.42 |
 | SpaCy SpanCat approach | 0.27 |
-| Merge of both approaches | 0.46 |
+| Merge of both approaches | **0.46** |

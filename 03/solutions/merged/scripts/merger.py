@@ -38,6 +38,12 @@ def merger(
 
         merged.append({"id": id_, "ners": ners})
 
+    # Convert list of lists to list of tuples
+    # and filter duplicates
+    for sample in merged:
+        sample["ners"] = [tuple(ner) for ner in sample["ners"]]
+        sample["ners"] = list(set(sample["ners"]))
+
     # Write the merged data to a new jsonl file
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     write_jsonl(output_file, merged)
